@@ -42,7 +42,6 @@ layout_mode = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
-theme_override_constants/margin_bottom = 16
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Panel/VBoxContainer/MarginContainer"]
 layout_mode = 2
@@ -63,7 +62,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 16
+theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
