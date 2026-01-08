@@ -18,10 +18,16 @@ func _ready():
 	set_settings(settings_repo.get_settings())
 	settings_repo.settings_changed.connect(set_settings)
 
+	if is_instance_valid(resource):
+		label.text = resource.name
+		asset_thumbnail.set_resource(resource)
+
 func set_asset(asset: AssetResource):
 	self.resource = asset
-	label.text = asset.name
-	asset_thumbnail.set_resource(asset)
+	if is_instance_valid(label):
+		label.text = asset.name
+	if is_instance_valid(asset_thumbnail):
+		asset_thumbnail.set_resource(asset)
 
 func set_settings(settings: AssetPlacerSettings):
 	custom_minimum_size = default_size * settings.ui_scale
