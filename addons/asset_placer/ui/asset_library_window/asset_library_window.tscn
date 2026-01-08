@@ -171,7 +171,7 @@ vertical_alignment = 1
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 4
-tooltip_text = "FolderCreate"
+tooltip_text = "Add asset folder"
 icon = SubResource("Texture2D_5cqey")
 
 [node name="ReloadButton" type="Button" parent="MainContent/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer"]

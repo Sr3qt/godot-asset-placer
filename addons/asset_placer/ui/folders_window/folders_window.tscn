@@ -51,7 +51,7 @@ alignment = 2
 [node name="AddFolderButton" type="Button" parent="Panel/VBoxContainer/MarginContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-tooltip_text = "FolderCreate"
+tooltip_text = "Add asset folder"
 icon = SubResource("Texture2D_caby4")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Panel/VBoxContainer"]
