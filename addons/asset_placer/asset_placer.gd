@@ -49,7 +49,7 @@ func start_node_transform(node: Node3D, placement: PlacementMode):
 	set_placement_mode(placement)
 	self.preview_aabb = AABBProvider.provide_aabb(preview_node)
 
-func _apply_preview_material(node: Node3D):
+func _apply_preview_material(node: Node):
 	if not preview_material:
 		return
 	if node is MeshInstance3D:
