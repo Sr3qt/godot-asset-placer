@@ -26,17 +26,17 @@ var _data_source: AssetLibraryDataSource
 
 var plugin_path: String:
 	get(): return get_script().resource_path.get_base_dir()
-	
-	
-const ADDON_PATH = "res://addons/asset_placer"	
+
+
+const ADDON_PATH = "res://addons/asset_placer"
 
 
 func _enable_plugin():
 	pass
-	
+
 func _disable_plugin():
 	pass
-	
+
 func _enter_tree():
 	_run_migrations()
 	_initialize_data_layer()
@@ -47,7 +47,7 @@ func _enter_tree():
 	_plane_preview = load("res://addons/asset_placer/ui/plane_preview/plan_preview.tscn").instantiate()
 	get_tree().root.add_child(_plane_preview)
 	plane_placer = PlanePlacer.new(_presenter, _plane_preview)
-	
+
 	_asset_placer = AssetPlacer.new(get_undo_redo(), plane_placer)
 	synchronizer = Synchronize.new(_folder_repository, _assets_repository)
 	scene_changed.connect(_handle_scene_changed)
@@ -57,21 +57,21 @@ func _enter_tree():
 	_asset_placer_window = load("res://addons/asset_placer/ui/asset_library_panel.tscn").instantiate()
 	_asset_placer_button = add_control_to_bottom_panel(_asset_placer_window, "Asset Placer")
 	_asset_placer_window.visibility_changed.connect(_on_dock_visibility_changed)
-	
+
 	_presenter.placement_mode_changed.connect(_asset_placer.set_placement_mode)
 
 	synchronizer.sync_complete.connect(func(added, removed, scanned):
 		var message = "Asset Placer Sync complete\nAdded: %d Removed: %d Scanned total: %d" % [added, removed, scanned]
 		EditorToasterCompat.toast(message)
 	)
-	
+
 	self.overlay =  _viewport_overlay_res.instantiate()
 	get_editor_interface().get_editor_viewport_3d().add_child(overlay)
-	
+
 	_file_system.resources_reimported.connect(_react_to_reimorted_files)
 	if !_file_system.is_scanning():
 		synchronizer.sync_all()
-		
+
 	_updater.updater_update_available.connect(_show_update_available)
 	_updater.updater_up_to_date.connect(_show_plugin_up_to_date)
 	_updater.update_ready.connect(_show_update_available)
@@ -108,8 +108,8 @@ func _handle_scene_changed(scene: Node):
 		_presenter.clear_parent()
 
 func _run_migrations():
-	_migration_collection_id.new().run()	
-	
+	_migration_collection_id.new().run()
+
 func _initialize_data_layer():
 	settings_repository = AssetPlacerSettingsRepository.new()
 	current_settings = settings_repository.get_settings()
@@ -130,7 +130,7 @@ func _on_dock_visibility_changed():
 	if not _asset_placer_window.visible:
 		_presenter.toggle_transformation_mode(AssetPlacerPresenter.TransformMode.None)
 		_presenter.clear_selection()
-	
+
 
 func start_placement(asset: AssetResource):
 	EditorInterface.set_main_screen_editor("3D")
@@ -158,11 +158,11 @@ func _handle_in_place_transform():
 		_asset_placer.stop_placement()
 
 func _forward_3d_gui_input(viewport_camera, event):
-	
+
 	if current_settings.bindings[AssetPlacerSettings.Bindings.InPlaceTransform].is_pressed(event):
 		_handle_in_place_transform()
 		return _handled()
-	
+
 	# Only process other inputs when plugin is active
 	if not _presenter.plugin_is_active():
 		return EditorPlugin.AFTER_GUI_INPUT_PASS
@@ -173,24 +173,24 @@ func _forward_3d_gui_input(viewport_camera, event):
 	if current_settings.bindings[AssetPlacerSettings.Bindings.Rotate].is_pressed(event):
 		_presenter.toggle_transformation_mode(AssetPlacerPresenter.TransformMode.Rotate)
 		return _handled()
-		
+
 	if current_settings.bindings[AssetPlacerSettings.Bindings.Scale].is_pressed(event):
 		_presenter.toggle_transformation_mode(AssetPlacerPresenter.TransformMode.Scale)
 		return _handled()
 	if current_settings.bindings[AssetPlacerSettings.Bindings.Translate].is_pressed(event):
 		_presenter.toggle_transformation_mode(AssetPlacerPresenter.TransformMode.Move)
-		return _handled()	
+		return _handled()
 	if current_settings.bindings[AssetPlacerSettings.Bindings.GridSnapping].is_pressed(event):
 		_presenter.toggle_grid_snapping()
 		return _handled()
-		
-	
+
+
 	if current_settings.binding_positive_transform.is_pressed(event):
 		var axis := _presenter.preview_transform_axis
 		if _asset_placer.transform_preview(_presenter.transform_mode, axis, 1):
 			return _handled()
-			
-	elif current_settings.binding_negative_transform.is_pressed(event):	
+
+	elif current_settings.binding_negative_transform.is_pressed(event):
 		var axis := _presenter.preview_transform_axis
 		if _asset_placer.transform_preview(_presenter.transform_mode, axis, -1):
 			return _handled()
@@ -204,11 +204,11 @@ func _forward_3d_gui_input(viewport_camera, event):
 	if current_settings.bindings[AssetPlacerSettings.Bindings.ToggleAxisZ].is_pressed(event):
 		_presenter.toggle_axis(Vector3.BACK)
 		return _handled()
-		
+
 	if current_settings.bindings[AssetPlacerSettings.Bindings.TogglePlaneMode].is_pressed(event):
 		_presenter.cycle_placement_mode()
-		return _handled()	
-	
+		return _handled()
+
 	if event is InputEventKey and event.is_pressed():
 		if event.keycode == KEY_ESCAPE:
 			_presenter.cancel()
@@ -227,7 +227,7 @@ func _forward_3d_gui_input(viewport_camera, event):
 			var handled = _asset_placer.place_asset(Input.is_key_pressed(KEY_SHIFT))
 			if handled:
 				return _handled()
-		
+
 	return EditorPlugin.AFTER_GUI_INPUT_PASS
 
 func _show_plugin_up_to_date():

@@ -27,4 +27,4 @@ static func get_node_aabb(node : Node, exclude_top_level_transform: bool = true)
 	if !exclude_top_level_transform:
 		bounds = node.transform * bounds
 
-	return bounds	
+	return bounds

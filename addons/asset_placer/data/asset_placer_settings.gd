@@ -2,7 +2,7 @@ extends RefCounted
 class_name AssetPlacerSettings
 
 var transform_step: float
-var rotation_step: float 
+var rotation_step: float
 var preview_material_resource: String
 var plane_material_resource: String
 var bindings: Dictionary
@@ -12,19 +12,19 @@ var update_channel: UpdateChannel
 
 var binding_positive_transform: APInputOption:
 	get(): return bindings[Bindings.TransformPositive]
-	
+
 var binding_negative_transform: APInputOption:
-	get(): return bindings[Bindings.TransformNegative]	
-	
-	
+	get(): return bindings[Bindings.TransformNegative]
+
+
 
 enum Bindings {
 	Rotate,
 	Scale,
 	Translate,
-	GridSnapping, 
-	InPlaceTransform, 
-	TransformPositive, 
+	GridSnapping,
+	InPlaceTransform,
+	TransformPositive,
 	TransformNegative,
 	ToggleAxisX,
 	ToggleAxisZ,

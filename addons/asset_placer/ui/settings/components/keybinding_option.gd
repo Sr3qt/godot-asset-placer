@@ -18,7 +18,7 @@ signal keybind_changed(option: APInputOption)
 		label = value
 		if key_bind_label:
 			key_bind_label.text = value
-		
+
 
 
 func _ready():

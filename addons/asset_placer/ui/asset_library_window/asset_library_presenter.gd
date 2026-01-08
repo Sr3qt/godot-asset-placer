@@ -25,8 +25,8 @@ func _init():
 	self.folder_repository = FolderRepository.instance
 	self.assets_repository = AssetsRepository.instance
 	self.synchronizer = Synchronize.instance
-	
-	
+
+
 
 func on_ready():
 	_current_assets = assets_repository.get_all_assets()
@@ -52,24 +52,24 @@ func add_asset(path: String, folder_path: String):
 	var tags: Array[int] = []
 	for collection in _active_collections:
 		tags.push_back(collection.id)
-		
+
 	var id = ResourceIdCompat.path_to_uid(path)
 	if !id:
 		push_error("Error getting id from path %s" % path)
 		return
-		
+
 	var existing = assets_repository.find_by_uid(id)
 	if existing:
 		var new_tags: Array[int] = []
 		for tag in tags:
 			if tag not in existing.tags:
 				new_tags.push_back(tag)
-				
+
 		existing.tags.append_array(new_tags)
 		assets_repository.update(existing)
 	else:
 		assets_repository.add_asset(path, tags, folder_path)
-	
+
 
 func delete_asset(asset: AssetResource):
 	assets_repository.delete(asset.id)
@@ -81,7 +81,7 @@ func add_assets_or_folders(files: PackedStringArray):
 			add_asset_folder(file)
 		else:
 			add_asset(file, "")
-		
+
 		_filter_by_collections_and_query()
 
 func toggle_asset_collection(asset: AssetResource, collection: AssetCollection, add: bool):
@@ -91,7 +91,7 @@ func toggle_asset_collection(asset: AssetResource, collection: AssetCollection, 
 	else:
 		asset.tags.erase(collection.id)
 		assets_repository.update(asset)
-	
+
 	_filter_by_collections_and_query()
 
 func toggle_collection_filter(collection: AssetCollection, enabled: bool):
@@ -103,20 +103,20 @@ func toggle_collection_filter(collection: AssetCollection, enabled: bool):
 		)
 	show_filter_info.emit(_active_collections.size())
 	_filter_by_collections_and_query()
-	
+
 
 
 func _filter_by_collections_and_query():
 	var all = assets_repository.get_all_assets()
 	var filtered: Array[AssetResource] = []
-	
+
 	for asset in all:
 		var matches_query = asset.name.containsn(_current_query) || _current_query.is_empty()
 		var belongs_to_collection = asset.belongs_to_some_collection(_active_collections) || _active_collections.is_empty()
-		
+
 		if matches_query and belongs_to_collection:
 			filtered.push_back(asset)
-	
+
 	if filtered.is_empty():
 		if _active_collections.is_empty() && _current_query.is_empty():
 			show_empty_view.emit(EmptyType.All)
@@ -127,12 +127,9 @@ func _filter_by_collections_and_query():
 	else:
 		assets_loaded.emit(filtered)
 		show_empty_view.emit(EmptyType.None)
-		
+
 	_filtered_assets = filtered
 
 
 func sync():
 	synchronizer.sync_all()
-	
-				
-			

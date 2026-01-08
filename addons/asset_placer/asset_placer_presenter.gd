@@ -28,7 +28,7 @@ var placement_mode: PlacementMode = PlacementMode.SurfacePlacement.new():
 	set(value):
 		placement_mode = value
 		placement_mode_changed.emit(value)
-		
+
 var preview_transform_axis: Vector3 = Vector3.UP
 
 
@@ -56,7 +56,7 @@ func plugin_is_active() -> bool:
 		return false
 
 func toggle_plane_placement():
-	placement_mode = PlacementMode.PlanePlacement.new(_last_plane_options)	
+	placement_mode = PlacementMode.PlanePlacement.new(_last_plane_options)
 
 
 func cycle_placement_mode():
@@ -67,7 +67,7 @@ func cycle_placement_mode():
 		toggle_surface_placement()
 
 func toggle_surface_placement():
-	placement_mode = PlacementMode.SurfacePlacement.new()	
+	placement_mode = PlacementMode.SurfacePlacement.new()
 
 func toggle_terrain_3d_placement(node_path: NodePath):
 	if not node_path.is_empty():
@@ -89,28 +89,28 @@ func toggle_transformation_mode(mode: TransformMode):
 	else:
 		transform_mode = mode
 	transform_mode_changed.emit(transform_mode)
-	
+
 	if transform_mode == TransformMode.Move:
 		select_placement_mode(PlacementMode.PlanePlacement.new(_last_plane_options))
-		
+
 	if transform_mode == TransformMode.Rotate:
 		set_random_rotation_enabled(false)
-		
+
 	if transform_mode == TransformMode.Scale:
-		set_random_scale_enabled(false)		
-	
+		set_random_scale_enabled(false)
+
 	_select_default_axis(transform_mode)
-	
+
 func clear_parent():
 	self._parent = NodePath("")
-	parent_changed.emit(_parent)	
-	
+	parent_changed.emit(_parent)
+
 func set_unform_scaling(value: bool):
 	options.uniform_scaling = value
 	if value:
 		options.min_scale = uniformV3(options.min_scale.x)
 		options.max_scale = uniformV3(options.max_scale.x)
-	options_changed.emit(options)	
+	options_changed.emit(options)
 
 func set_grid_snap_value(value: float):
 	options.snapping_grid_step = value
@@ -124,13 +124,13 @@ func toggle_axis(axis: Vector3):
 	var new := (preview_transform_axis - axis).abs()
 	select_axis(new)
 
-func select_axis(axis: Vector3):	
+func select_axis(axis: Vector3):
 	if axis == Vector3.ZERO:
 		show_error.emit("Ignoring Axis selection because it is zero")
 		return
 	preview_transform_axis = axis
 	preview_transform_axis_changed.emit(preview_transform_axis)
-	
+
 	var movement_mode = transform_mode == TransformMode.Move
 	var idle_mode = transform_mode == TransformMode.None
 	var plane_placement = placement_mode is PlacementMode.PlanePlacement
@@ -142,20 +142,20 @@ func select_axis(axis: Vector3):
 func set_random_scale_enabled(value: bool):
 	options.scale_on_placement = value
 	options_changed.emit(options)
-	
+
 	if value and transform_mode == TransformMode.Scale:
 		toggle_transformation_mode(TransformMode.None)
-	
+
 func set_random_rotation_enabled(value: bool):
 	options.rotate_on_placement = value
 	options_changed.emit(options)
-	
+
 	if value and transform_mode == TransformMode.Rotate:
-		toggle_transformation_mode(TransformMode.None)	
+		toggle_transformation_mode(TransformMode.None)
 
 func set_align_normals(value: bool):
 	options.align_normals = value
-	options_changed.emit(options)		
+	options_changed.emit(options)
 
 func set_use_asset_origin(value: bool):
 	options.use_asset_origin = value
@@ -173,14 +173,14 @@ func _select_default_axis(mode: TransformMode):
 
 func uniformV3(value: float) -> Vector3:
 	return Vector3(value, value, value)
- 	
+
 func set_grid_snapping_enabled(value: bool):
 	options.snapping_enabled = value
 	options_changed.emit(options)
-	
+
 func toggle_grid_snapping():
 	set_grid_snapping_enabled(!options.snapping_enabled)
-	
+
 func set_min_rotation(vector: Vector3):
 	options.min_rotation = vector
 	options_changed.emit(options)
@@ -205,12 +205,12 @@ func cancel():
 		end_node_transform_mode()
 	else:
 		clear_selection()
-	
+
 func clear_selection():
 	_selected_asset = null
 	asset_deselected.emit()
 	placer_active.emit(false)
-	
+
 func toggle_asset(asset: AssetResource):
 	if asset == _selected_asset:
 		_selected_asset = null
@@ -220,11 +220,11 @@ func toggle_asset(asset: AssetResource):
 		_selected_asset = asset
 		asset_selected.emit(asset)
 		placer_active.emit(true)
-		
+
 func select_asset(asset: AssetResource):
 	_selected_asset = asset
 	asset_selected.emit(asset)
-	placer_active.emit(true)		
+	placer_active.emit(true)
 
 func start_node_transform_mode(node: Node3D):
 	_selected_node = node
@@ -233,13 +233,13 @@ func start_node_transform_mode(node: Node3D):
 func end_node_transform_mode():
 	_selected_node = null
 	placer_active.emit(false)
-	
-	
+
+
 func on_asset_placed():
 	if options.enable_random_placement:
 		var random = current_assets.pick_random()
 		select_asset(random)
-		
+
 
 func is_node_transform_mode() -> bool:
 	return _selected_node != null

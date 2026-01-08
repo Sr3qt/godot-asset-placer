@@ -21,7 +21,7 @@ func _ready():
 	presenter.show_collections.connect(show_collections)
 	presenter.show_empty_view.connect(_show_empty_view)
 	presenter.ready()
-	
+
 	add_button.pressed.connect(presenter.create_collection)
 	name_text_field.text_changed.connect(presenter.set_name)
 	color_picker_button.color_changed.connect(presenter.set_color)
@@ -36,7 +36,7 @@ func show_collections(items: Array[AssetCollection]):
 	empty_view.hide()
 	for child in collections_container.get_children():
 		child.queue_free()
-	
+
 	for item in items:
 		var list_item = _collection_item_list_resource.instantiate() as AssetCollectionListItem
 		collections_container.add_child(list_item)
@@ -49,4 +49,3 @@ func show_collections(items: Array[AssetCollection]):
 			)
 		)
 		list_item.set_collection(item)
-		

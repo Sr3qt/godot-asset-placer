@@ -34,7 +34,7 @@ func create_collection():
 	_repository.add_collection(_new_collection_name, _new_collection_color)
 	clear_text_field.emit()
 	enable_create_button.emit(false)
-	
+
 
 func _update_state_new_collection_state():
 	var valid_name := !_new_collection_name.is_empty()
@@ -47,9 +47,7 @@ func _load_collections():
 		show_empty_view.emit()
 	else:
 		show_collections.emit(collections)
-	
-	
+
+
 func delete_collection(collection: AssetCollection):
 	_repository.delete_collection(collection.id)
-	
-		

@@ -8,11 +8,11 @@ func _ready():
 	PluginUpdater.instance.updater_update_available.connect(func(a):
 		show_update_available(true)
 	)
-	
+
 	PluginUpdater.instance.update_ready.connect(func(a):
 		show_update_available(true)
 	)
-	
+
 	PluginUpdater.instance.updater_up_to_date.connect(func():
 		show_update_available(false)
 	)

@@ -7,7 +7,7 @@ func _init(node: Node3D):
 	self.terrain_3d_node = node
 
 func get_placement_point(
-	camera: Camera3D, 
+	camera: Camera3D,
 	mouse_position: Vector2
 ) -> CollisionHit:
 	if terrain_3d_node.has_method("get_intersection"):

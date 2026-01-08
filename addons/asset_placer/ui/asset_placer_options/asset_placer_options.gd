@@ -34,14 +34,14 @@ func _ready():
 		if m is PlacementMode.Terrain3DPlacement:
 			placement_mode_options_button.select(2)
 	)
-	
+
 	placement_mode_options_button.item_selected.connect(func(id):
 		match id:
 			0: presenter.toggle_surface_placement()
 			1: presenter.toggle_plane_placement()
 			2: _show_terrain_3d_selector()
 	)
-	
+
 	grid_snapping_checkbox.toggled.connect(presenter.set_grid_snapping_enabled)
 	grid_snap_value_spin_box.value_changed.connect(presenter.set_grid_snap_value)
 	random_asset_check_box.toggled.connect(presenter.set_random_asset_enabled)
@@ -51,17 +51,17 @@ func _ready():
 	max_scale_selector.value_changed.connect(presenter.set_max_scale)
 	uniform_scale_check_box.toggled.connect(presenter.set_unform_scaling)
 	use_assets_origin_checkbox.toggled.connect(presenter.set_use_asset_origin)
-	
+
 	plane_axis_spin_box.value_changed.connect(func(normal: Vector3):
 		var plane = PlaneOptions.new(normal, plane_origin_spin_box.get_vector())
 		presenter.placement_mode = PlacementMode.PlanePlacement.new(plane)
 	)
-	
+
 	plane_origin_spin_box.value_changed.connect(func(origin: Vector3):
-		var plane = PlaneOptions.new(plane_axis_spin_box.get_vector(), origin)	
+		var plane = PlaneOptions.new(plane_axis_spin_box.get_vector(), origin)
 		presenter.placement_mode = PlacementMode.PlanePlacement.new(plane)
 	)
-	
+
 	presenter.placement_mode_changed.connect(func(mode: PlacementMode):
 		if mode is PlacementMode.PlanePlacement:
 			plane_axis_container.show()
@@ -70,13 +70,13 @@ func _ready():
 			plane_origin_spin_box.set_value_no_signal(mode.plane_options.origin)
 		else:
 			plane_axis_container.hide()
-			plane_origin_container.hide()	
+			plane_origin_container.hide()
 		)
-	
+
 	parent_button.pressed.connect(func():
 		EditorInterface.popup_node_selector(presenter.select_parent, [&"Node3D"])
 	)
-	
+
 	random_rotation_check_box.toggled.connect(presenter.set_random_rotation_enabled)
 	random_scale_check_box.toggled.connect(presenter.set_random_scale_enabled)
 	align_normals_checkbox.toggled.connect(presenter.set_align_normals)

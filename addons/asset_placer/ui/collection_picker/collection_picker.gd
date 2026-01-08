@@ -13,7 +13,7 @@ func _ready():
 	presenter.show_collections.connect(show_collections)
 	presenter.show_empty_view.connect(show_empty_view)
 	presenter.ready()
-	
+
 
 func show_empty_view():
 	add_item("No Collections added yet")
@@ -30,12 +30,12 @@ func show_collections(collections: Array[AssetCollection]):
 		add_check_item(collections[i].name)
 		set_item_checked(i, selected)
 		set_item_icon(i, make_circle_icon(16, collections[i].backgroundColor))
-	
+
 	index_pressed.connect(func(index):
 		toggle_item_checked(index)
 		collection_selected.emit(collections[index], is_item_checked(index))
 	)
-	
+
 func make_circle_icon(radius: int, color: Color) -> Texture2D:
 	var size = radius * 2
 	var img := Image.create(size, size, false, Image.FORMAT_RGBA8)

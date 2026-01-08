@@ -17,8 +17,8 @@ func _ready():
 func set_collection(collection: AssetCollection):
 	name_label.text = collection.name
 	texture_rect.texture = make_circle_icon(32, collection.backgroundColor)
-	
-	
+
+
 
 func make_circle_icon(radius: int, color: Color) -> Texture2D:
 	var size = radius * 2

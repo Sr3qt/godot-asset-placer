@@ -24,7 +24,7 @@ var updater: PluginUpdater = PluginUpdater.instance
 
 func _ready():
 	var settings = settings_repository.get_settings()
-	settings_repository.settings_changed.connect(func(s): 
+	settings_repository.settings_changed.connect(func(s):
 		updater.check_for_updates(s.update_channel)
 	)
 	updater.show_update_loading.connect(_show_update_loading)
@@ -42,7 +42,7 @@ func _ready():
 	feature_request_button.pressed.connect(func():
 		OS.shell_open(FEATURE_TEMPLATE)
 	)
-	
+
 func _show_update_available_for_download(update: PluginUpdate):
 		update_button.text = "Version %s Availalbe" % update.version
 		update_button.show()

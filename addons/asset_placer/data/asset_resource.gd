@@ -24,7 +24,7 @@ func _init(resId: String, name: String, tags: Array[int] = [], folder_path: Stri
 
 
 var scene: Resource:
-	get(): 
+	get():
 		if _scene == null:
 			_scene = load(id)
 			return _scene
@@ -35,9 +35,9 @@ var scene: Resource:
 
 func belongs_to_collection(collection : AssetCollection) -> bool:
 	return tags.any(func(tag: int): return tag == collection.id)
-	
-	
+
+
 func belongs_to_some_collection(collections: Array[AssetCollection]) -> bool:
 	return collections.any(func(collection: AssetCollection):
 		return self.belongs_to_collection(collection)
-	)	
+	)

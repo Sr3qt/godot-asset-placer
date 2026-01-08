@@ -50,8 +50,8 @@ func set_placement_mode(mode: PlacementMode):
 		placement_mode_label.text = "Surface Placement"
 	if mode is PlacementMode.Terrain3DPlacement:
 		placement_mode_label.text = "Terrain3D Placement"
-		
-		 
+
+
 func show_error(message: String):
 	var tween = create_tween()
 	tween.tween_property(error_container, "position", _error_position, 0.3)
@@ -71,8 +71,8 @@ func show_settings(settings: AssetPlacerSettings):
 
 
 func show_options(options: AssetPlacerOptions):
-	snapping_switch.button_pressed = options.snapping_enabled	
-		
+	snapping_switch.button_pressed = options.snapping_enabled
+
 func set_axis(vector: Vector3):
 	x_check_button.button_pressed = vector.x == 1
 	y_check_button.button_pressed = vector.y == 1

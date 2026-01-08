@@ -15,11 +15,11 @@ func _ready():
 	delete_button.pressed.connect(func():
 		folder_delete_clicked.emit()
 	)
-	
+
 	sync_button.pressed.connect(func():
 		folder_sync_clicked.emit()
 	)
-	
+
 	subfolders_checkbox.toggled.connect(func(toggled):
 		folder_include_subfloders_change.emit(toggled)
 	)

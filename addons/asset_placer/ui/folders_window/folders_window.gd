@@ -12,7 +12,7 @@ class_name FoldersWindow
 func _ready():
 	presenter.folders_loaded.connect(show_folders)
 	presenter._ready()
-	
+
 	add_folder_button.pressed.connect(func():
 		show_folder_dialog()
 	)
@@ -22,8 +22,8 @@ func _can_drop_data(at_position, data):
 		var type = data["type"]
 		var dirs = type == "files_and_dirs"
 		return dirs and data.has("files")
-	return false	
-	
+	return false
+
 func _drop_data(at_position, data):
 	var dirs: PackedStringArray = data["files"]
 	presenter.add_folders(dirs)
@@ -31,7 +31,7 @@ func _drop_data(at_position, data):
 func show_folders(folders: Array[AssetFolder]):
 	for child in v_box_container.get_children():
 		child.queue_free()
-		
+
 	for folder in folders:
 		var instance: FolderView = folder_res.instantiate()
 		v_box_container.add_child(instance)
@@ -45,8 +45,8 @@ func show_folders(folders: Array[AssetFolder]):
 		instance.folder_sync_clicked.connect(func():
 			presenter.sync_folder(folder)
 		)
-		
-		
+
+
 func show_folder_dialog():
 	var folder_dialog = EditorFileDialog.new()
 	folder_dialog.file_mode = EditorFileDialog.FILE_MODE_OPEN_DIR

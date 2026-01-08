@@ -15,7 +15,7 @@ func _init():
 
 func _ready():
 	folders_loaded.emit(folder_repository.get_all())
-	
+
 	folder_repository.folder_changed.connect(func():
 		var folders = folder_repository.get_all()
 		folders_loaded.emit(folders)
@@ -37,7 +37,7 @@ func include_subfolders(include: bool, folder: AssetFolder):
 
 func add_folder(folder: String):
 	if folder.get_extension().is_empty():
-		folder_repository.add(folder)	
+		folder_repository.add(folder)
 
 func add_folders(folders: PackedStringArray):
 	for folder in folders:

@@ -40,20 +40,20 @@ func _ready():
 	keybinding_option_rotate.keybind_changed.connect(func(key):
 		_presenter.set_binding(AssetPlacerSettings.Bindings.Rotate, key)
 	)
-	
+
 	keybinding_option_positive_transform.keybind_changed.connect(func(key):
 		_presenter.set_binding(AssetPlacerSettings.Bindings.TransformPositive, key)
 	)
-	
-	keybinding_option_translate.keybind_changed.connect(func(key): 
+
+	keybinding_option_translate.keybind_changed.connect(func(key):
 		_presenter.set_binding(AssetPlacerSettings.Bindings.Translate, key)
 	)
-	
-	keybinding_option_plane_mode.keybind_changed.connect(func(key): 
+
+	keybinding_option_plane_mode.keybind_changed.connect(func(key):
 		_presenter.set_binding(AssetPlacerSettings.Bindings.TogglePlaneMode, key)
 	)
-	
-	keybinding_option_negative_transform.keybind_changed.connect(func(key): 
+
+	keybinding_option_negative_transform.keybind_changed.connect(func(key):
 		_presenter.set_binding(AssetPlacerSettings.Bindings.TransformNegative, key)
 	)
 	keybinding_option_scale.keybind_changed.connect(func(key):
@@ -62,7 +62,7 @@ func _ready():
 	keybinding_option_in_place_transform.keybind_changed.connect(func(key):
 		_presenter.set_binding(AssetPlacerSettings.Bindings.InPlaceTransform, key)
 	)
-	keybinding_option_grid_snap.keybind_changed.connect(func(key): 
+	keybinding_option_grid_snap.keybind_changed.connect(func(key):
 		_presenter.set_binding(AssetPlacerSettings.Bindings.GridSnapping, key)
 	)
 	keybinding_option_axis_x.keybind_changed.connect(func(key):
@@ -77,11 +77,11 @@ func _ready():
 	reset_button.pressed.connect(_presenter.reset_to_defaults)
 	material_clear_button.pressed.connect(_presenter.clear_preivew_material)
 	material_picker_button.pressed.connect(_show_preview_material_picker)
-	
+
 	update_channel_info_button.pressed.connect(func():
 		OS.shell_open("https://levinzonr.github.io/godot-asset-placer/development-lifecycle/")
 	)
-	
+
 	plane_material_picker_button.pressed.connect(func():
 		EditorInterface.popup_quick_open(_presenter.set_plane_material, ["BaseMaterial3D"])
 	)
@@ -109,7 +109,7 @@ func _show_settings(setting: AssetPlacerSettings):
 		material_picker_button.text = "No Preview Material"
 	else:
 		material_picker_button.text = setting.preview_material_resource.get_file()
-	
+
 
 func _show_preview_material_picker():
 	EditorInterface.popup_quick_open(_presenter.set_preview_material, ["BaseMaterial3D"])
