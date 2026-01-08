@@ -24,7 +24,7 @@ static func get_node_aabb(node : Node, exclude_top_level_transform: bool = true)
 		else:
 			bounds = bounds.merge(child_bounds)
 
-	if !exclude_top_level_transform:
+	if !exclude_top_level_transform and node is Node3D:
 		bounds = node.transform * bounds
 
 	return bounds
