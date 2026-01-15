@@ -54,10 +54,8 @@ func show_assets(assets: Array[AssetResource]):
 		child.queue_free()
 	for asset in assets:
 		var child: AssetResourcePreview = preview_resource.instantiate()
-		child.left_clicked.connect(AssetPlacerPresenter._instance.toggle_asset)
-		child.right_clicked.connect(func(asset):
-			show_asset_menu(asset, child)
-		)
+		child.left_clicked.connect(_on_preview_left_clicked)
+		child.right_clicked.connect(_on_preview_right_clicked)
 		child.set_meta("id", asset.id)
 		grid_container.add_child(child)
 		child.set_asset(asset)
@@ -168,3 +166,15 @@ func show_sync_in_progress(active: bool):
 	else:
 		reload_button.show()
 		progress_bar.hide()
+
+func _on_preview_left_clicked(preview: AssetResourcePreview) -> void:
+	AssetPlacerPresenter._instance.toggle_asset(preview.resource)
+
+func _on_preview_right_clicked(preview: AssetResourcePreview) -> void:
+	show_asset_menu(preview.resource, preview)
+
+func _on_preview_shift_clicked(preview: AssetResourcePreview) -> void:
+	pass
+
+func _on_preview_ctrl_clicked(preview: AssetResourcePreview) -> void:
+	pass
