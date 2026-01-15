@@ -22,8 +22,6 @@ class_name AssetLibraryWindow
 @onready var empty_search_content = %EmptySearchContent
 @onready var empty_view_add_folder_btn = %EmptyViewAddFolderBtn
 
-signal asset_selected(asset: AssetResource)
-
 
 func _ready():
 	presenter.assets_loaded.connect(show_assets)
