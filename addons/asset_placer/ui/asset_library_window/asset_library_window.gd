@@ -181,4 +181,13 @@ func _on_preview_shift_clicked(preview: AssetResourcePreview) -> void:
 	pass
 
 func _on_preview_ctrl_clicked(preview: AssetResourcePreview) -> void:
-	pass
+	if preview in selected_previews:
+		if selected_previews.size() == 1:
+			clear_selected_previews()
+		else:
+			selected_previews.erase(preview)
+	else:
+		if selected_previews.is_empty():
+			set_presenter_asset(preview)
+		else:
+			selected_previews.append(preview)
