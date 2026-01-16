@@ -1,8 +1,20 @@
-[gd_scene load_steps=5 format=3 uid="uid://bfnj2xve84rvc"]
+[gd_scene load_steps=6 format=3 uid="uid://bfnj2xve84rvc"]
 
 [ext_resource type="Script" uid="uid://dacpe4563g5x2" path="res://addons/asset_placer/ui/components/asset_resource_preview.gd" id="1_q3676"]
 [ext_resource type="Texture2D" uid="uid://be61c5ff55gfo" path="res://addons/asset_placer/icon.png" id="2_55ohh"]
 [ext_resource type="Script" uid="uid://dephufwlu765k" path="res://addons/asset_placer/ui/components/asset_thumbnail.gd" id="2_xdgah"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_55ohh"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.54896253, 0.5489626, 0.5489625, 0.6)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
 
 [sub_resource type="LabelSettings" id="LabelSettings_55ohh"]
 font_size = 14
@@ -22,6 +34,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_vertical = 14
 theme_type_variation = &"FlatButton"
+theme_override_styles/pressed = SubResource("StyleBoxFlat_55ohh")
 toggle_mode = true
 script = ExtResource("1_q3676")
 
