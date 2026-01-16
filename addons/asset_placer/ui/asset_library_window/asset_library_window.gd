@@ -117,7 +117,20 @@ func set_presenter_asset(preview: AssetResourcePreview):
 	selected_previews.append(preview)
 	AssetPlacerPresenter._instance.select_asset(preview.resource)
 
+## Select all previews between from and to, both inclusively.
+func select_preview_range(from : int, to : int):
+	var size: = grid_container.get_children().size()
+	assert(absi(from) < size)
+	assert(absi(to) < size)
 
+	var _from: = mini((from + size) % size, (to + size) % size)
+	var _to: = maxi((from + size) % size, (to + size) % size)
+
+	for child in grid_container.get_children().slice(_from, _to + 1):
+		if child is AssetResourcePreview:
+			if child not in selected_previews:
+				selected_previews.append(child)
+				child.set_pressed_no_signal(true)
 
 func show_empty_view(type: AssetLibraryPresenter.EmptyType):
 	match type:
@@ -178,7 +191,51 @@ func _on_preview_right_clicked(preview: AssetResourcePreview) -> void:
 	show_asset_menu(preview.resource, preview)
 
 func _on_preview_shift_clicked(preview: AssetResourcePreview) -> void:
-	pass
+	if selected_previews.is_empty():
+		set_presenter_asset(preview)
+
+	if selected_previews.size() == 1 and preview in selected_previews:
+		preview.set_pressed_no_signal(!preview.is_pressed())
+		return
+
+	var children: = grid_container.get_children()
+	var preview_index: = children.find(preview)
+
+	var start_preview: = selected_previews[0]
+	var start_index: = children.find(start_preview)
+
+	assert(preview_index != -1)
+	assert(start_index != -1)
+
+	var new_start_index: = _get_index_last_connected(start_index, preview_index)
+	if new_start_index == preview_index:
+		preview.set_pressed_no_signal(!preview.is_pressed())
+		return
+
+	clear_selected_previews()
+
+	select_preview_range(new_start_index, preview_index)
+
+func _get_index_last_connected(start_index : int, preview_index : int) -> int:
+	if start_index == 0 or start_index == grid_container.get_children().size():
+		return start_index
+
+	var end_index: = -(grid_container.get_children().size() + 1)
+	var reverse: = -1
+	if start_index >= preview_index:
+		end_index = grid_container.get_children().size()
+		reverse = 1
+
+	var new_start_index = start_index
+	start_index = start_index + reverse
+
+	for child in grid_container.get_children().slice(start_index, end_index, reverse):
+		if child in selected_previews:
+			new_start_index += reverse
+		else:
+			break
+
+	return new_start_index
 
 func _on_preview_ctrl_clicked(preview: AssetResourcePreview) -> void:
 	if preview in selected_previews:
