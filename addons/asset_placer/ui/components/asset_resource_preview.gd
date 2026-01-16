@@ -40,8 +40,14 @@ func _gui_input(event):
 
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			if event.shift_pressed:
+				set_pressed_no_signal(!button_pressed)
 				shift_clicked.emit(self)
 			elif event.ctrl_pressed:
+				set_pressed_no_signal(!button_pressed)
 				ctrl_clicked.emit(self)
 			else:
+				set_pressed_no_signal(!button_pressed)
 				left_clicked.emit(self)
+			# We need to accept event and manually toggle early,
+			# so AssetLibraryWindow can set toggle properly
+			accept_event()

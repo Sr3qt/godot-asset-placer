@@ -2,6 +2,8 @@
 extends Control
 class_name AssetLibraryWindow
 
+var selected_previews : Array[AssetResourcePreview] = []
+
 @onready var presenter = AssetLibraryPresenter.new()
 @onready var folder_presenter = FolderPresenter.new()
 
@@ -27,8 +29,6 @@ func _ready():
 	presenter.assets_loaded.connect(show_assets)
 	presenter.show_filter_info.connect(show_filter_info)
 	presenter.show_sync_active.connect(show_sync_in_progress)
-	AssetPlacerPresenter._instance.asset_selected.connect(set_selected_asset)
-	AssetPlacerPresenter._instance.asset_deselected.connect(clear_selected_asset)
 	empty_collection_view_add_folder_btn.pressed.connect(show_folder_dialog)
 	empty_view_add_folder_btn.pressed.connect(show_folder_dialog)
 	presenter.show_empty_view.connect(show_empty_view)
@@ -48,13 +48,15 @@ func show_assets(assets: Array[AssetResource]):
 	placer_presenter.current_assets = assets
 	empty_collection_content.hide()
 	scroll_container.show()
+	clear_selected_previews()
 	for child in grid_container.get_children():
 		child.queue_free()
 	for asset in assets:
 		var child: AssetResourcePreview = preview_resource.instantiate()
 		child.left_clicked.connect(_on_preview_left_clicked)
 		child.right_clicked.connect(_on_preview_right_clicked)
-		child.set_meta("id", asset.id)
+		child.shift_clicked.connect(_on_preview_shift_clicked)
+		child.ctrl_clicked.connect(_on_preview_ctrl_clicked)
 		grid_container.add_child(child)
 		child.set_asset(asset)
 
@@ -87,13 +89,6 @@ func show_folder_dialog():
 	folder_dialog.dir_selected.connect(presenter.add_asset_folder)
 	EditorInterface.popup_dialog_centered(folder_dialog)
 
-
-func clear_selected_asset():
-	for child in grid_container.get_children():
-		if child is Button:
-			child.set_pressed_no_signal(false)
-			child.release_focus()
-
 func _can_drop_data(at_position, data):
 	if data is Dictionary:
 		var type = data["type"]
@@ -112,11 +107,15 @@ func show_filter_info(size: int):
 		filters_label.show()
 		filters_label.text = str(size)
 
-func set_selected_asset(asset: AssetResource):
-	for child in grid_container.get_children():
-		if child is Button:
-			child.set_pressed_no_signal(child.get_meta("id") == asset.id)
+func clear_selected_previews():
+	for preview in selected_previews:
+		preview.set_pressed_no_signal(false)
+	selected_previews.clear()
+	AssetPlacerPresenter._instance.clear_selection()
 
+func set_presenter_asset(preview: AssetResourcePreview):
+	selected_previews.append(preview)
+	AssetPlacerPresenter._instance.select_asset(preview.resource)
 
 
 
@@ -166,7 +165,14 @@ func show_sync_in_progress(active: bool):
 		progress_bar.hide()
 
 func _on_preview_left_clicked(preview: AssetResourcePreview) -> void:
-	AssetPlacerPresenter._instance.toggle_asset(preview.resource)
+	if selected_previews.is_empty():
+		set_presenter_asset(preview)
+	elif selected_previews.size() == 1 and preview in selected_previews:
+		clear_selected_previews()
+	else:
+		clear_selected_previews()
+		set_presenter_asset(preview)
+		preview.set_pressed_no_signal(true)
 
 func _on_preview_right_clicked(preview: AssetResourcePreview) -> void:
 	show_asset_menu(preview.resource, preview)
