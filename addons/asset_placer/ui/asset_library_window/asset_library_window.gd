@@ -10,11 +10,14 @@ var selected_previews : Array[AssetResourcePreview] = []
 @onready var placer_presenter := AssetPlacerPresenter._instance
 @onready var grid_container: Container = %GridContainer
 @onready var preview_resource = preload("res://addons/asset_placer/ui/components/asset_resource_preview.tscn")
+@onready var unhandled_click_handler = %UnhandledClickHandler
+
 @onready var add_folder_button: Button = %AddFolderButton
 @onready var search_field: LineEdit = %SearchField
 @onready var filter_button: Button = %FilterButton
 @onready var filters_label: Label = %FiltersLabel
 @onready var reload_button: Button = %ReloadButton
+
 @onready var progress_bar = %ProgressBar
 @onready var empty_content = %EmptyContent
 @onready var main_content = %MainContent
@@ -29,6 +32,7 @@ func _ready():
 	presenter.assets_loaded.connect(show_assets)
 	presenter.show_filter_info.connect(show_filter_info)
 	presenter.show_sync_active.connect(show_sync_in_progress)
+
 	empty_collection_view_add_folder_btn.pressed.connect(show_folder_dialog)
 	empty_view_add_folder_btn.pressed.connect(show_folder_dialog)
 	presenter.show_empty_view.connect(show_empty_view)
@@ -41,8 +45,7 @@ func _ready():
 		CollectionPicker.show_in(filter_button, presenter._active_collections, presenter.toggle_collection_filter)
 	)
 
-
-
+	unhandled_click_handler.pressed.connect(clear_selected_previews)
 
 func show_assets(assets: Array[AssetResource]):
 	placer_presenter.current_assets = assets

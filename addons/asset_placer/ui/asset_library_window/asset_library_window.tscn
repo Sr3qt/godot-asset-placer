@@ -102,9 +102,16 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_qx6qk")
 
+[node name="UnhandledClickHandler" type="Button" parent="MainContent/PanelContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+action_mode = 0
+flat = true
+
 [node name="MarginContainer" type="MarginContainer" parent="MainContent/PanelContainer2"]
 layout_mode = 2
 size_flags_horizontal = 3
+mouse_filter = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 9
 theme_override_constants/margin_right = 16
@@ -112,11 +119,13 @@ theme_override_constants/margin_bottom = 16
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MainContent/PanelContainer2/MarginContainer"]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/separation = 0
 alignment = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MainContent/PanelContainer2/MarginContainer/VBoxContainer"]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/separation = 16
 alignment = 2
 
@@ -194,12 +203,14 @@ editor_preview_indeterminate = true
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
+mouse_filter = 2
 
 [node name="GridContainer" type="HFlowContainer" parent="MainContent/PanelContainer2/MarginContainer/VBoxContainer/ScrollContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+mouse_filter = 2
 
 [node name="EmptyCollectionContent" type="CenterContainer" parent="MainContent/PanelContainer2/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
