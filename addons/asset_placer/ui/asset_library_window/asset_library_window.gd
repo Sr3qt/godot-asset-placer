@@ -87,7 +87,7 @@ func show_assets(assets: Array[AssetResource]):
 			selected_previews.append(child)
 			child.set_pressed_no_signal(true)
 
-func show_asset_menu(asset: AssetResource, control: Control):
+func show_asset_menu(asset: AssetResource):
 	var options_menu := PopupMenu.new()
 	var mouse_pos = DisplayServer.mouse_get_position()
 	options_menu.add_icon_item(EditorIconTexture2D.new("Groups"), "Manage collections")
@@ -236,7 +236,7 @@ func _on_preview_left_clicked(preview: AssetResourcePreview) -> void:
 		preview.set_pressed_no_signal(true)
 
 func _on_preview_right_clicked(preview: AssetResourcePreview) -> void:
-	show_asset_menu(preview.resource, preview)
+	show_asset_menu(preview.resource)
 
 func _on_preview_shift_clicked(preview: AssetResourcePreview) -> void:
 	if selected_previews.is_empty():
