@@ -89,30 +89,16 @@ func show_assets(assets: Array[AssetResource]):
 
 func show_asset_menu(asset: AssetResource):
 	var options_menu := PopupMenu.new()
-	var mouse_pos = DisplayServer.mouse_get_position()
 	options_menu.add_icon_item(EditorIconTexture2D.new("Groups"), "Manage collections")
 	options_menu.add_icon_item(EditorIconTexture2D.new("File"), "Open")
 	options_menu.add_icon_item(EditorIconTexture2D.new("Remove"), "Remove")
-	options_menu.index_pressed.connect(func(index):
-		match index:
-			0:
-				CollectionPicker.show_dynamic_at(
-					mouse_pos,
-					_on_collection_button_pressed,
-					_get_selected_tags_count(),
-					selected_previews.size(),
-				)
-			1:
-				EditorInterface.open_scene_from_path(asset.scene.resource_path)
-				EditorInterface.set_main_screen_editor("3D")
-			2:
-				if placer_presenter._selected_asset == asset:
-					placer_presenter.clear_selection()
-				presenter.delete_asset(asset)
-			_:
-				pass
+	options_menu.index_pressed.connect(func(index): _on_asset_menu_clicked(index, asset))
+
+	EditorInterface.popup_dialog(options_menu, Rect2(
+		DisplayServer.mouse_get_position(),
+		options_menu.get_contents_minimum_size()
+		)
 	)
-	EditorInterface.popup_dialog(options_menu, Rect2(mouse_pos, options_menu.get_contents_minimum_size()))
 
 func show_folder_dialog():
 	var folder_dialog = EditorFileDialog.new()
@@ -296,6 +282,25 @@ func _on_preview_ctrl_clicked(preview: AssetResourcePreview) -> void:
 			set_presenter_asset(preview)
 		else:
 			selected_previews.append(preview)
+
+func _on_asset_menu_clicked(index : int, asset : AssetResource):
+	match index:
+		0:
+			CollectionPicker.show_dynamic_at(
+				DisplayServer.mouse_get_position(),
+				_on_collection_button_pressed,
+				_get_selected_tags_count(),
+				selected_previews.size(),
+			)
+		1:
+			EditorInterface.open_scene_from_path(asset.scene.resource_path)
+			EditorInterface.set_main_screen_editor("3D")
+		2:
+			if placer_presenter._selected_asset == asset:
+				placer_presenter.clear_selection()
+			presenter.delete_asset(asset)
+		_:
+			pass
 
 func _on_collection_button_pressed(collection, add):
 	presenter.set_assets_collection(get_selected_assets(), collection, add)
