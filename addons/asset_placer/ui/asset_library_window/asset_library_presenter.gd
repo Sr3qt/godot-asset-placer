@@ -94,6 +94,19 @@ func toggle_asset_collection(asset: AssetResource, collection: AssetCollection, 
 
 	_filter_by_collections_and_query()
 
+func set_assets_collection(assets: Array[AssetResource], collection: AssetCollection, add: bool):
+	for asset in assets:
+		if add:
+			if collection.id in asset.tags:
+				continue
+			asset.tags.append(collection.id)
+		else:
+			assert(collection.id in asset.tags)
+			asset.tags.erase(collection.id)
+		assets_repository.update(asset)
+
+	_filter_by_collections_and_query()
+
 func toggle_collection_filter(collection: AssetCollection, enabled: bool):
 	if enabled:
 		_active_collections.push_back(collection)

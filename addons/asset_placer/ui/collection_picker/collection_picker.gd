@@ -7,6 +7,8 @@ signal collection_selected(collection: AssetCollection, selected: bool)
 @onready var presenter := AssetCollectionsPresenter.new()
 
 var pre_selected: Array[AssetCollection]
+var all_pre_selected: Array[AssetCollection]
+var any_pre_selected: Array[AssetCollection]
 
 func _ready():
 	hide_on_checkable_item_selection = false
@@ -26,9 +28,12 @@ func show_empty_view():
 func show_collections(collections: Array[AssetCollection]):
 	var circle_tex := load("uid://ofkf56gtg5g3") # Circle.svg
 	for i in collections.size():
-		var collection_id = collections[i].id
-		var selected = pre_selected.any(func(c): return c.id == collection_id)
-		add_check_item(collections[i].name)
+		var collection_id: = collections[i].id
+		var collection_name: = collections[i].name
+		var selected: = all_pre_selected.any(func(c): return c.id == collection_id)
+		if any_pre_selected.any(func(c): return c.id == collection_id):
+			collection_name += " (partially selected)"
+		add_check_item(collection_name)
 		set_item_checked(i, selected)
 		set_item_icon(i, circle_tex)
 		set_item_icon_modulate(i, collections[i].backgroundColor)
@@ -45,3 +50,17 @@ static func show_in(context: Control, selected: Array[AssetCollection], on_selec
 	var size = picker.get_contents_minimum_size()
 	var position = DisplayServer.mouse_get_position()
 	EditorInterface.popup_dialog(picker, Rect2(position, size))
+
+static func show_at(
+		top_left: Vector2,
+		on_select: Callable,
+		all_selected: Array[AssetCollection],
+		any_selected: Array[AssetCollection] = []
+	):
+	var picker: CollectionPicker = CollectionPicker.new()
+	picker.collection_selected.connect(on_select)
+	picker.all_pre_selected = all_selected
+	picker.any_pre_selected = any_selected
+	var size: = picker.get_contents_minimum_size()
+	EditorInterface.popup_dialog(picker, Rect2(top_left, size))
+

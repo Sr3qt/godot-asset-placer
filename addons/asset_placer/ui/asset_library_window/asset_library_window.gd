@@ -71,9 +71,23 @@ func show_asset_menu(asset: AssetResource, control: Control):
 	options_menu.add_icon_item(EditorIconTexture2D.new("Remove"), "Remove")
 	options_menu.index_pressed.connect(func(index):
 		match index:
-			0: CollectionPicker.show_in(control, asset.shallow_collections, func(collection, add):
-				presenter.toggle_asset_collection(asset, collection, add)
-			)
+			0:
+				var dict: = get_selected_collections_count()
+				var all: Array[AssetCollection]
+				var any: Array[AssetCollection]
+				for key in dict.keys():
+					assert(dict[key] <= selected_previews.size())
+					if dict[key] == selected_previews.size():
+						all.append(key)
+					else:
+						any.append(key)
+
+				CollectionPicker.show_at(
+					mouse_pos,
+					_on_collection_button_pressed,
+					all,
+					any,
+				)
 			1:
 				EditorInterface.open_scene_from_path(asset.scene.resource_path)
 				EditorInterface.set_main_screen_editor("3D")
@@ -81,7 +95,8 @@ func show_asset_menu(asset: AssetResource, control: Control):
 				if placer_presenter._selected_asset == asset:
 					placer_presenter.clear_selection()
 				presenter.delete_asset(asset)
-			_: pass
+			_:
+				pass
 	)
 	EditorInterface.popup_dialog(options_menu, Rect2(mouse_pos, options_menu.get_contents_minimum_size()))
 
@@ -109,6 +124,30 @@ func show_filter_info(size: int):
 	else:
 		filters_label.show()
 		filters_label.text = str(size)
+
+func _get_selected_tags_count() -> Dictionary[int, int]:
+	var tags: Dictionary[int, int] = {}
+	for preview in selected_previews:
+		for tag in preview.resource.tags:
+			if not tag in tags:
+				tags[tag] = 1
+			else:
+				tags[tag] += 1
+	return tags
+
+func get_selected_collections_count() -> Dictionary[AssetCollection, int]:
+	var dict: = _get_selected_tags_count()
+	var out: Dictionary[AssetCollection, int] = {}
+	for key in dict.keys():
+		var collection: = AssetCollection.new("name", Color(), key)
+		out[collection] = dict[key]
+	return out
+
+func get_selected_assets() -> Array[AssetResource]:
+	var out: Array[AssetResource] = []
+	for preview in selected_previews:
+		out.append(preview.resource)
+	return out
 
 func clear_selected_previews():
 	for preview in selected_previews:
@@ -251,3 +290,7 @@ func _on_preview_ctrl_clicked(preview: AssetResourcePreview) -> void:
 			set_presenter_asset(preview)
 		else:
 			selected_previews.append(preview)
+
+func _on_collection_button_pressed(collection, add):
+	presenter.set_assets_collection(get_selected_assets(), collection, add)
+
