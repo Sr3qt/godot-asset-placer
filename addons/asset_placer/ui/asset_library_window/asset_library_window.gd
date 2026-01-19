@@ -42,7 +42,11 @@ func _ready():
 	search_field.text_changed.connect(presenter.on_query_change)
 	reload_button.pressed.connect(presenter.sync)
 	filter_button.pressed.connect(func ():
-		CollectionPicker.show_in(filter_button, presenter._active_collections, presenter.toggle_collection_filter)
+		CollectionPicker.show_at(
+			filter_button.get_screen_position() + Vector2(filter_button.size.x, 0),
+			presenter.toggle_collection_filter,
+			presenter._active_collections,
+		)
 	)
 
 	unhandled_click_handler.pressed.connect(clear_selected_previews)
