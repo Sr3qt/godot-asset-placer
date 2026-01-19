@@ -2,7 +2,11 @@
 extends Control
 class_name AssetLibraryWindow
 
+## If true, keep selected previews when assets are refreshed.
+var keep_selected := true
 var selected_previews : Array[AssetResourcePreview] = []
+
+var _new_assets: Array[AssetResource]
 
 @onready var presenter = AssetLibraryPresenter.new()
 @onready var folder_presenter = FolderPresenter.new()
@@ -29,7 +33,7 @@ var selected_previews : Array[AssetResourcePreview] = []
 
 
 func _ready():
-	presenter.assets_loaded.connect(show_assets)
+	presenter.assets_loaded.connect(func(assets): _new_assets = assets)
 	presenter.show_filter_info.connect(show_filter_info)
 	presenter.show_sync_active.connect(show_sync_in_progress)
 
@@ -51,13 +55,25 @@ func _ready():
 
 	unhandled_click_handler.pressed.connect(clear_selected_previews)
 
+func _process(_delta: float) -> void:
+	if not _new_assets.is_empty():
+		show_assets(_new_assets)
+		_new_assets = []
+
 func show_assets(assets: Array[AssetResource]):
 	placer_presenter.current_assets = assets
 	empty_collection_content.hide()
 	scroll_container.show()
+
+	var previous_ids : Array[String]
+	if keep_selected:
+		for preview in selected_previews:
+			previous_ids.append(preview.resource.id)
+
 	clear_selected_previews()
 	for child in grid_container.get_children():
 		child.queue_free()
+
 	for asset in assets:
 		var child: AssetResourcePreview = preview_resource.instantiate()
 		child.left_clicked.connect(_on_preview_left_clicked)
@@ -66,6 +82,10 @@ func show_assets(assets: Array[AssetResource]):
 		child.ctrl_clicked.connect(_on_preview_ctrl_clicked)
 		grid_container.add_child(child)
 		child.set_asset(asset)
+
+		if keep_selected and asset.id in previous_ids:
+			selected_previews.append(child)
+			child.set_pressed_no_signal(true)
 
 func show_asset_menu(asset: AssetResource, control: Control):
 	var options_menu := PopupMenu.new()
