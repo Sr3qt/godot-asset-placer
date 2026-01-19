@@ -96,21 +96,11 @@ func show_asset_menu(asset: AssetResource, control: Control):
 	options_menu.index_pressed.connect(func(index):
 		match index:
 			0:
-				var dict: = get_selected_collections_count()
-				var all: Array[AssetCollection]
-				var any: Array[AssetCollection]
-				for key in dict.keys():
-					assert(dict[key] <= selected_previews.size())
-					if dict[key] == selected_previews.size():
-						all.append(key)
-					else:
-						any.append(key)
-
-				CollectionPicker.show_at(
+				CollectionPicker.show_dynamic_at(
 					mouse_pos,
 					_on_collection_button_pressed,
-					all,
-					any,
+					_get_selected_tags_count(),
+					selected_previews.size(),
 				)
 			1:
 				EditorInterface.open_scene_from_path(asset.scene.resource_path)
