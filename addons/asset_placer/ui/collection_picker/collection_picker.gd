@@ -9,8 +9,6 @@ signal collection_selected(collection: AssetCollection, selected: bool)
 @onready var presenter := AssetCollectionsPresenter.new()
 
 var pre_selected: Array[AssetCollection]
-var all_pre_selected: Array[AssetCollection]
-var any_pre_selected: Array[AssetCollection]
 
 var _tags_count : Dictionary[int, int]
 var _selected_count: int
@@ -62,14 +60,6 @@ func show_collections(collections: Array[AssetCollection]):
 			set_item_text(index, get_item_text(index).left(-_SUFFIX.length()))
 		collection_selected.emit(collections[index], is_item_checked(index))
 	)
-
-static func show_in(context: Control, selected: Array[AssetCollection], on_select: Callable):
-	var picker: CollectionPicker = CollectionPicker.new()
-	picker.collection_selected.connect(on_select)
-	picker.pre_selected = selected
-	var size = picker.get_contents_minimum_size()
-	var position = DisplayServer.mouse_get_position()
-	EditorInterface.popup_dialog(picker, Rect2(position, size))
 
 static func show_at(
 		top_left: Vector2,

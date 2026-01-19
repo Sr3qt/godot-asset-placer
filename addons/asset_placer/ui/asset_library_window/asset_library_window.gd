@@ -149,14 +149,6 @@ func _get_selected_tags_count() -> Dictionary[int, int]:
 				tags[tag] += 1
 	return tags
 
-func get_selected_collections_count() -> Dictionary[AssetCollection, int]:
-	var dict: = _get_selected_tags_count()
-	var out: Dictionary[AssetCollection, int] = {}
-	for key in dict.keys():
-		var collection: = AssetCollection.new("name", Color(), key)
-		out[collection] = dict[key]
-	return out
-
 func get_selected_assets() -> Array[AssetResource]:
 	var out: Array[AssetResource] = []
 	for preview in selected_previews:
