@@ -96,7 +96,8 @@ func clear_selected_asset():
 	for child in grid_container.get_children():
 		if child is Button:
 			child.set_pressed_no_signal(false)
-			child.release_focus()
+			if child.is_inside_tree():
+				child.release_focus()
 
 func _can_drop_data(at_position, data):
 	if data is Dictionary:
